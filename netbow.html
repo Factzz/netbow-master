@@ -170,7 +170,7 @@
     flowSelect.addEventListener('change', calculate);
     calculate();
 
-    window.NetBowApp = {
+ window.NetBowApp = {
         async applyToZone(zoneIndex) {
             const seconds = calculate();
             const btn = event.currentTarget;
@@ -185,12 +185,20 @@
                 const targetPlant = plants.find(p => p.originalIndex === zoneIndex);
                 
                 if(targetPlant) {
-                    const success = await RosemarySDK.writeToBoard(targetPlant.id, "duration", seconds);
+                    // [FIXED] เปลี่ยนคำสั่งตรงนี้! ใช้ updatePlantConfig แทน
+                    // ส่งค่า duration ไปแก้ที่ระบบหลักโดยตรง
+                    const success = await RosemarySDK.updatePlantConfig(targetPlant.id, { 
+                        duration: seconds 
+                    });
+
                     if(success) {
                         btn.style.background = "#34C759";
                         btn.style.color = "white";
                         btn.innerHTML = '<i class="fa-solid fa-check"></i>';
                         if(window.showToast) window.showToast(`บันทึก ${seconds} วินาที @ Zone ${zoneIndex+1}`);
+                        
+                        // (Optional) สั่งให้หน้า Dashboard หลักรีเฟรชข้อมูลใหม่ทันที
+                        if(window.loadData) window.loadData();
                     } else {
                         throw new Error("Connect Fail");
                     }
@@ -212,4 +220,5 @@
             }, 1500);
         }
     };
+
 </script>
