@@ -1,0 +1,215 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    /* บังคับใช้ฟอนต์ Inter กับทั้งการ์ด */
+    .netbow-app-container {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        letter-spacing: -0.02em; /* บีบตัวอักษรนิดนึงให้ดูแน่นขึ้น */
+    }
+    /* บังคับ Form Elements ให้ใช้ฟอนต์เดียวกัน (ปกติมันชอบไม่ยอมเปลี่ยนตาม) */
+    .netbow-app-container select,
+    .netbow-app-container input,
+    .netbow-app-container button {
+        font-family: inherit !important;
+    }
+</style>
+
+<div class="glass-card netbow-app-container" style="text-align:center; padding:30px 20px; max-width: 100%; overflow: hidden;">
+    
+    <div style="margin-bottom:25px; position: relative;">
+        <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 120px; height: 120px; background: radial-gradient(circle, rgba(0,122,255,0.15) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+        <i class="fa-solid fa-ring" style="font-size:3.5rem; color:#007AFF; text-shadow: 0 5px 15px rgba(0,122,255,0.3); position: relative;"></i>
+        <h2 style="margin:15px 0 5px; color:#1d1d1d; font-weight: 800; letter-spacing: -0.5px;">NetBow Master</h2>
+        <div style="color:#888; font-size:0.9rem; font-weight: 500;">Precision Root Zone Management</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.6); padding:15px; border-radius:18px; margin-bottom:15px; text-align:left; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+        <label style="font-size:0.8rem; font-weight:700; color:#555; text-transform: uppercase; letter-spacing: 0.5px; display:block; margin-bottom:8px;">
+            <i class="fa-solid fa-gauge-high" style="color: #FF9500;"></i> DRIPPER FLOW (PCJ)
+        </label>
+        <div class="select-wrapper" style="position: relative;">
+            <select id="nb-flow" style="width:100%; padding:12px; border-radius:12px; border:1px solid #eee; background:#fff; font-size: 1rem; appearance: none; -webkit-appearance: none; font-weight: 600; color: #333;">
+                <option value="1.2">1.2 L/H (Low Flow)</option>
+                <option value="2.0" selected>2.0 L/H (Standard)</option>
+                <option value="4.0">4.0 L/H (High Flow)</option>
+                <option value="8.0">8.0 L/H (Ultra Flow)</option>
+            </select>
+            <i class="fa-solid fa-chevron-down" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; pointer-events: none;"></i>
+        </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%); padding:20px; border-radius:24px; margin-bottom:25px; border: 1px solid rgba(0,122,255,0.1); box-shadow: 0 8px 20px rgba(0,122,255,0.05);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <label style="font-size:0.8rem; font-weight:700; color:#007AFF; text-transform: uppercase; letter-spacing: 0.5px;">
+                <i class="fa-solid fa-glass-water"></i> Target Volume
+            </label>
+            <span id="nb-vol-display" style="font-weight:800; color:#007AFF; font-size:1.4rem; text-shadow: 0 2px 5px rgba(0,122,255,0.1);">100 ml</span>
+        </div>
+        
+        <input type="range" id="nb-vol-slider" min="50" max="1000" step="10" value="100" style="width:100%; height: 8px; border-radius: 5px; background: #dceaff; outline: none; -webkit-appearance: none;">
+        
+        <div style="display:flex; justify-content:space-between; color:#888; font-size:0.75rem; margin-top:10px; font-weight: 600;">
+            <span>50 ml</span>
+            <span>1,000 ml</span>
+        </div>
+    </div>
+
+    <div class="calculation-box" style="background:linear-gradient(135deg, #1d1d1d 0%, #333 100%); color:white; padding:25px; border-radius:24px; margin-bottom:25px; position:relative; overflow:hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="position:relative; z-index:2; text-align: left;">
+            <div style="opacity:0.6; font-size:0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Estimated Duration</div>
+            <div style="font-size:3.2rem; font-weight:900; line-height:1; letter-spacing: -2px;">
+                <span id="nb-calc-sec">0</span> <span style="font-size:1.2rem; font-weight:600; opacity: 0.8; letter-spacing: normal;">sec</span>
+            </div>
+            <div style="font-size:0.8rem; color:#4facfe; margin-top:10px; display: flex; align-items: center; gap: 5px; font-weight: 500;">
+                <i class="fa-solid fa-bolt"></i> Auto-Sync to Board
+            </div>
+        </div>
+        <div style="position:absolute; top:-30px; right:-30px; width:100px; height:100px; border-radius:50%; border:8px solid rgba(255,255,255,0.05);"></div>
+        <div style="position:absolute; bottom:-40px; right:10px; width:80px; height:80px; border-radius:50%; background: radial-gradient(circle, rgba(79,172,254,0.2) 0%, rgba(0,0,0,0) 70%);"></div>
+    </div>
+
+    <div style="font-size: 0.8rem; font-weight: 700; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; text-align: left; padding-left: 5px;">Apply to Zone</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <button onclick="window.NetBowApp.applyToZone(0)" class="btn-nb-zone">
+            <span class="zone-num">01</span> Zone
+        </button>
+        <button onclick="window.NetBowApp.applyToZone(1)" class="btn-nb-zone">
+            <span class="zone-num">02</span> Zone
+        </button>
+        <button onclick="window.NetBowApp.applyToZone(2)" class="btn-nb-zone">
+            <span class="zone-num">03</span> Zone
+        </button>
+        <button onclick="window.NetBowApp.applyToZone(3)" class="btn-nb-zone">
+            <span class="zone-num">04</span> Zone
+        </button>
+    </div>
+</div>
+
+<style>
+    /* Slider Thumb */
+    #nb-vol-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #007AFF;
+        cursor: pointer;
+        box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2);
+        transition: transform 0.1s;
+    }
+    #nb-vol-slider::-webkit-slider-thumb:active {
+        transform: scale(1.1);
+    }
+
+    /* Zone Buttons */
+    .btn-nb-zone {
+        padding: 15px;
+        border: none;
+        border-radius: 16px;
+        background: white;
+        color: #333;
+        font-weight: 700; /* เพิ่มความหนาปุ่ม */
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .btn-nb-zone .zone-num {
+        background: #f0f0f5;
+        color: #888;
+        padding: 3px 8px; /* ปรับ padding นิดหน่อย */
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 800; /* เลขโซนหนาสุด */
+        letter-spacing: -0.5px;
+    }
+    .btn-nb-zone:active {
+        background: #007AFF;
+        color: white;
+        transform: scale(0.95);
+        box-shadow: 0 2px 5px rgba(0,122,255,0.3);
+    }
+    .btn-nb-zone:active .zone-num {
+        background: rgba(255,255,255,0.3);
+        color: white;
+    }
+</style>
+
+<script type="module">
+    // (ส่วน Script เหมือนเดิมทุกประการ ไม่ต้องแก้ครับ)
+    import { RosemarySDK } from './js/sdk.js';
+
+    const slider = document.getElementById('nb-vol-slider');
+    const flowSelect = document.getElementById('nb-flow');
+    const display = document.getElementById('nb-vol-display');
+    const resultSec = document.getElementById('nb-calc-sec');
+
+    function calculate() {
+        const ml = parseInt(slider.value);
+        const lph = parseFloat(flowSelect.value);
+        
+        display.innerText = ml + " ml";
+        
+        // สูตร: (L/h * 1000 / 3600) = ml/sec
+        const mlPerSec = (lph * 1000) / 3600;
+        const seconds = Math.round(ml / mlPerSec);
+        
+        resultSec.innerText = seconds;
+        
+        return seconds;
+    }
+
+    slider.addEventListener('input', calculate);
+    flowSelect.addEventListener('change', calculate);
+    calculate();
+
+    window.NetBowApp = {
+        async applyToZone(zoneIndex) {
+            const seconds = calculate();
+            const btn = event.currentTarget;
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            btn.style.background = "#f2f2f7";
+            
+            try {
+                const sysInfo = await RosemarySDK.getSystemInfo();
+                const plants = sysInfo.plants || [];
+                const targetPlant = plants.find(p => p.originalIndex === zoneIndex);
+                
+                if(targetPlant) {
+                    const success = await RosemarySDK.writeToBoard(targetPlant.id, "duration", seconds);
+                    if(success) {
+                        btn.style.background = "#34C759";
+                        btn.style.color = "white";
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                        if(window.showToast) window.showToast(`บันทึก ${seconds} วินาที @ Zone ${zoneIndex+1}`);
+                    } else {
+                        throw new Error("Connect Fail");
+                    }
+                } else {
+                    if(window.showToast) window.showToast(`ไม่พบต้นไม้ใน Zone ${zoneIndex+1}`);
+                    btn.style.background = "#FF9500";
+                    btn.innerHTML = '<i class="fa-solid fa-exclamation"></i>';
+                }
+            } catch(e) {
+                if(window.showToast) window.showToast("เกิดข้อผิดพลาด");
+                btn.style.background = "#FF3B30";
+                btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            }
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 1500);
+        }
+    };
+</script>
