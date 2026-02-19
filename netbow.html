@@ -95,10 +95,10 @@
                 const targetPlant = plants.find(p => p.originalIndex === zoneIndex);
                 
                 if(targetPlant) {
-                    // [CRITICAL FIX] ส่งข้อมูลให้ครบทั้ง threshold และ duration
-                    // เพื่อป้องกันบอร์ดปฏิเสธค่า (Partial Update Rejection)
+                    // [THE CRITICAL FIX IS HERE] 
+                    // ต้องส่ง threshold (ค่าเดิม) ไปด้วย ไม่งั้นบอร์ดจะไม่รับค่า!
                     const success = await RosemarySDK.updatePlantConfig(targetPlant.id, { 
-                        threshold: targetPlant.threshold, // ต้องส่งค่าเดิมไปด้วย
+                        threshold: targetPlant.threshold, // <--- บรรทัดนี้สำคัญที่สุด!
                         duration: seconds 
                     });
 
@@ -108,7 +108,7 @@
                         btn.innerHTML = '<i class="fa-solid fa-check"></i>';
                         if(window.showToast) window.showToast(`บันทึก ${seconds} วินาที @ Zone ${zoneIndex+1}`);
                         
-                        // บังคับหน้าจอหลักโหลดข้อมูลใหม่ทันที
+                        // สั่งให้หน้าหลักโหลดข้อมูลใหม่ทันที
                         if(window.loadData) window.loadData();
                     } else {
                         throw new Error("Connect Fail");
