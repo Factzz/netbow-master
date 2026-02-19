@@ -9,6 +9,8 @@
     #nb-vol-slider::-webkit-slider-thumb:active { transform: scale(1.1); }
     .btn-nb-zone { padding: 15px; border: none; border-radius: 16px; background: white; color: #333; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-nb-zone:active { background: #007AFF; color: white; transform: scale(0.95); }
+    .btn-nb-zone .zone-num { background: #f0f0f5; color: #888; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; letter-spacing: -0.5px; }
+    .btn-nb-zone:active .zone-num { background: rgba(255,255,255,0.3); color: white; }
 </style>
 
 <div class="glass-card netbow-app-container" style="text-align:center; padding:30px 20px; max-width: 100%; overflow: hidden;">
@@ -49,10 +51,10 @@
     </div>
 
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-        <button onclick="window.NetBowApp.applyToZone(0)" class="btn-nb-zone">Zone 01</button>
-        <button onclick="window.NetBowApp.applyToZone(1)" class="btn-nb-zone">Zone 02</button>
-        <button onclick="window.NetBowApp.applyToZone(2)" class="btn-nb-zone">Zone 03</button>
-        <button onclick="window.NetBowApp.applyToZone(3)" class="btn-nb-zone">Zone 04</button>
+        <button onclick="window.NetBowApp.applyToZone(0)" class="btn-nb-zone"><span class="zone-num">01</span> Zone</button>
+        <button onclick="window.NetBowApp.applyToZone(1)" class="btn-nb-zone"><span class="zone-num">02</span> Zone</button>
+        <button onclick="window.NetBowApp.applyToZone(2)" class="btn-nb-zone"><span class="zone-num">03</span> Zone</button>
+        <button onclick="window.NetBowApp.applyToZone(3)" class="btn-nb-zone"><span class="zone-num">04</span> Zone</button>
     </div>
 </div>
 
@@ -93,8 +95,10 @@
                 const targetPlant = plants.find(p => p.originalIndex === zoneIndex);
                 
                 if(targetPlant) {
-                    // [IMPORTANT FIX] ใช้ updatePlantConfig เพื่อส่งค่าเข้าระบบหลัก
+                    // [CRITICAL FIX] ส่งข้อมูลให้ครบทั้ง threshold และ duration
+                    // เพื่อป้องกันบอร์ดปฏิเสธค่า (Partial Update Rejection)
                     const success = await RosemarySDK.updatePlantConfig(targetPlant.id, { 
+                        threshold: targetPlant.threshold, // ต้องส่งค่าเดิมไปด้วย
                         duration: seconds 
                     });
 
@@ -103,6 +107,9 @@
                         btn.style.color = "white";
                         btn.innerHTML = '<i class="fa-solid fa-check"></i>';
                         if(window.showToast) window.showToast(`บันทึก ${seconds} วินาที @ Zone ${zoneIndex+1}`);
+                        
+                        // บังคับหน้าจอหลักโหลดข้อมูลใหม่ทันที
+                        if(window.loadData) window.loadData();
                     } else {
                         throw new Error("Connect Fail");
                     }
